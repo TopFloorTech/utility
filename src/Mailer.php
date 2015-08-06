@@ -1,6 +1,7 @@
 <?php
 
 use Accord\MandrillSwiftMailer\SwiftMailer\MandrillTransport;
+use TopFloor\Utility\Config;
 
 class Mailer {
     /** @var \Swift_Mailer $Mailer */
@@ -15,11 +16,11 @@ class Mailer {
             return;
         }
 
-        self::$config = Config::get('mail', 'mail');
+        self::$config = Config::get('mail');
 
         try {
             $transport = new MandrillTransport(new \Swift_Events_SimpleEventDispatcher());
-            $transport->setApiKey(self::$config['password']);
+            $transport->setApiKey(self::$config['api_key']);
 
             self::$Mailer = \Swift_Mailer::newInstance($transport);
 
@@ -54,5 +55,6 @@ class Mailer {
             // TODO: Sending failed, so do something useful.
         }
 
+        return false;
     }
 }

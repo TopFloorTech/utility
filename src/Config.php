@@ -25,7 +25,7 @@ class Config {
         self::$configDir = $dir;
     }
 
-    public function get($key = null, $default = null) {
+    public static function get($key = null, $default = null) {
         self::initialize();
 
         if (is_null($key)) {
