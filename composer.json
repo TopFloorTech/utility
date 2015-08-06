@@ -1,0 +1,21 @@
+{
+    "name": "topfloor/utility",
+    "description": "A PHP 5.4+ base library used by other TopFloor modules",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Ben McClure",
+            "email": "bmcclure@topfloortech.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TopFloor\\Utility\\": "src"
+        }
+    },
+    "require": {
+        "hassankhan/config": "^0.8.2",
+        "symfony/yaml": "^2.7"
+    }
+}
