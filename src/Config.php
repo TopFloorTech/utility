@@ -14,40 +14,55 @@ class Config {
 
     private static $configDir;
 
+    /** @var \Noodlehaus\Config $config */
     private static $config;
+
+    public static function setConfigDir($dir) {
+        if (!substr($dir, strlen($dir) - 1) == '/') {
+            $dir .= '/';
+        }
+
+        self::$configDir = $dir;
+    }
+
+    public function get($key = null, $default = null) {
+        self::initialize();
+
+        if (is_null($key)) {
+            return self::$config;
+        }
+
+        return self::$config->get($key, $default);
+    }
 
     private static function initialize() {
         if (self::$initialized) {
             return;
         }
 
+        $configFiles = self::getConfigFiles();
 
-
-
-
-        $config = new \Noodlehaus\Config([])
+        self::$config = new \Noodlehaus\Config($configFiles);
 
         self::$initialized = true;
     }
 
-    private function getConfigFiles() {
-        if ($handle = opendir(self::configDir())) {
+    private static function getConfigFiles() {
+        $dir = self::configDir();
 
-            while (false !== ($entry = readdir($handle))) {
+        $files = array();
 
-                if ($entry != "." && $entry != "..") {
-
-                    echo "$entry\n";
-                }
-            }
-
-            closedir($handle);
+        foreach (glob("{$dir}*.{php,ini,yaml}", GLOB_BRACE) as $file) {
+            $files[] = $file;
         }
+
+        return $files;
     }
 
-    private function configDir() {
+    private static function configDir() {
         if (!isset(self::$configDir)) {
-            self::$configDir = dirname(dirname(dirname(__FILE__);
+            // A feeble attempt to guess the config dir to be at the same level as the vendor dir.
+            self::$configDir = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/config/';
         }
 
         return self::$configDir;

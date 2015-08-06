@@ -16,6 +16,7 @@
     },
     "require": {
         "hassankhan/config": "^0.8.2",
-        "symfony/yaml": "^2.7"
+        "symfony/yaml": "^2.7",
+        "accord/mandrill-swiftmailer": "^1.0"
     }
 }
