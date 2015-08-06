@@ -1,7 +1,8 @@
 <?php
 
+namespace TopFloor\Utility;
+
 use Accord\MandrillSwiftMailer\SwiftMailer\MandrillTransport;
-use TopFloor\Utility\Config;
 
 class Mailer {
     /** @var \Swift_Mailer $Mailer */
