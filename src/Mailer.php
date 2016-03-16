@@ -17,10 +17,10 @@ class Mailer {
 
     protected static $initialized = false;
 
-    public static $handlers = [
-        'mandrill' => 'TopFloor\Utility\MailHandlers\MandrillMailHandler',
-        'smtp' => 'TopFloor\Utility\MailHandlers\SmtpMailHandler',
-    ];
+    public static $handlers = array(
+        'mandrill' => 'TopFloor\\Utility\\MailHandlers\\MandrillMailHandler',
+        'smtp' => 'TopFloor\\Utility\\MailHandlers\\SmtpMailHandler',
+    );
 
     public static function initialize() {
         if (self::$initialized) {
@@ -29,14 +29,15 @@ class Mailer {
 
         self::$config = Config::get('mail');
 
-        $protocol = self::$config['protocol'];
+        $protocol = strtolower(self::$config['protocol']);
 
-        if (!array_key_exists(strtolower($protocol), self::$handlers)) {
+        if (!array_key_exists(protocol, self::$handlers)) {
             throw new UtilityException('Mailer protocol ' . $protocol . ' could not be located.');
         }
 
+        $className = self::$handlers[$protocol];
+
         try {
-            $className = self::$handlers[$protocol];
             self::$handler = new $className(self::$config);
             self::$Mailer = self::$handler->getMailer();
 
