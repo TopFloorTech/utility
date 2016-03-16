@@ -73,7 +73,9 @@ class Mailer {
         try {
             return self::$Mailer->send($message);
         } catch (Exception $e) {
-            throw new UtilityException("Unable to send message", 100, $e);
+            // Do nothing
         }
+
+        return false;
     }
 }
