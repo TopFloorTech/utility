@@ -2,7 +2,9 @@
 
 namespace TopFloor\Utility;
 
-use Accord\MandrillSwiftMailer\SwiftMailer\MandrillTransport;
+use Exception;
+use TopFloor\Exceptions\UtilityException;
+use TopFloor\MailHandlers\MailHandlerInterface;
 
 class Mailer {
     /** @var \Swift_Mailer $Mailer */
@@ -10,7 +12,15 @@ class Mailer {
 
     public static $config;
 
-    private static $initialized = false;
+    /** @var MailHandlerInterface */
+    protected static $handler;
+
+    protected static $initialized = false;
+
+    public static $protocols = [
+        'mandrill' => 'TopFloor\\Utility\\MailProtocols\\MandrillMailProtocol',
+        'smtp' => 'TopFloor\\Utility\\MailProtocols\\SmtpMailProtocol',
+    ];
 
     public static function initialize() {
         if (self::$initialized) {
@@ -19,33 +29,42 @@ class Mailer {
 
         self::$config = Config::get('mail');
 
-        try {
-            $transport = new MandrillTransport(new \Swift_Events_SimpleEventDispatcher());
-            $transport->setApiKey(self::$config['api_key']);
+        $protocol = self::$config['protocol'];
 
-            self::$Mailer = \Swift_Mailer::newInstance($transport);
+        if (!array_key_exists(strtolower($protocol), self::$protocols)) {
+            throw new UtilityException('Mailer protocol ' . $protocol . ' could not be located.');
+        }
+
+        try {
+            $class = self::$protocols[$protocol];
+            self::$handler = new $class(self::$config);
+            self::$Mailer = self::$handler->getMailer();
 
             self::$initialized = true;
         } catch (Exception $e) {
-            // TODO: Initialization failed, so mail sending won't work.
+            throw new UtilityException("Unable to initialize handler", 50, $e);
         }
     }
 
     /**
      * @param $subject
-     *
      * @return \Swift_Message
+     * @throws \TopFloor\Exceptions\UtilityException
      */
     public static function newMessage($subject) {
         self::initialize();
 
-        return \Swift_Message::newInstance($subject);
+        try {
+            return \Swift_Message::newInstance($subject);
+        } catch (Exception $e) {
+            throw new UtilityException("Unable to create message", 75, $e);
+        }
     }
 
     /**
      * @param $message
-     *
      * @return int
+     * @throws \TopFloor\Exceptions\UtilityException
      */
     public static function send($message) {
         self::initialize();
@@ -53,9 +72,7 @@ class Mailer {
         try {
             return self::$Mailer->send($message);
         } catch (Exception $e) {
-            // TODO: Sending failed, so do something useful.
+            throw new UtilityException("Unable to send message", 100, $e);
         }
-
-        return false;
     }
 }
