@@ -6,7 +6,7 @@
  * Time: 12:01 PM
  */
 
-namespace TopFloor\MailHandlers;
+namespace TopFloor\Utility\MailHandlers;
 
 use Swift_Mailer;
 use Swift_SmtpTransport;

@@ -6,7 +6,7 @@
  * Time: 12:58 PM
  */
 
-namespace TopFloor\MailHandlers;
+namespace TopFloor\Utility\MailHandlers;
 
 
 abstract class MailHandler {

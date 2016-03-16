@@ -4,7 +4,7 @@ namespace TopFloor\Utility;
 
 use Exception;
 use TopFloor\Exceptions\UtilityException;
-use TopFloor\MailHandlers\MailHandlerInterface;
+use TopFloor\Utility\MailHandlers\MailHandlerInterface;
 
 class Mailer {
     /** @var \Swift_Mailer $Mailer */
@@ -17,7 +17,7 @@ class Mailer {
 
     protected static $initialized = false;
 
-    public static $protocols = [
+    public static $handlers = [
         'mandrill' => '\\TopFloor\\Utility\\MailHandlers\\MandrillMailHandler',
         'smtp' => '\\TopFloor\\Utility\\MailHandlers\\SmtpMailHandler',
     ];
@@ -31,13 +31,13 @@ class Mailer {
 
         $protocol = self::$config['protocol'];
 
-        if (!array_key_exists(strtolower($protocol), self::$protocols)) {
+        if (!array_key_exists(strtolower($protocol), self::$handlers)) {
             throw new UtilityException('Mailer protocol ' . $protocol . ' could not be located.');
         }
 
         try {
-            $class = self::$protocols[$protocol];
-            self::$handler = new $class(self::$config);
+            $className = self::$handlers[$protocol];
+            self::$handler = new $className(self::$config);
             self::$Mailer = self::$handler->getMailer();
 
             self::$initialized = true;
