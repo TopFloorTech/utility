@@ -18,8 +18,8 @@ class Mailer {
     protected static $initialized = false;
 
     public static $handlers = [
-        'mandrill' => '\\TopFloor\\Utility\\MailHandlers\\MandrillMailHandler',
-        'smtp' => '\\TopFloor\\Utility\\MailHandlers\\SmtpMailHandler',
+        'mandrill' => 'TopFloor\Utility\MailHandlers\MandrillMailHandler',
+        'smtp' => 'TopFloor\Utility\MailHandlers\SmtpMailHandler',
     ];
 
     public static function initialize() {
