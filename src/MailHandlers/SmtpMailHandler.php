@@ -13,7 +13,7 @@ use Swift_SmtpTransport;
 
 class SmtpMailHandler extends MailHandler {
     public function getMailer() {
-        $transport = new Swift_SmtpTransport($this->config['host'], $this->config['port']);
+        $transport = new Swift_SmtpTransport($this->config['host'], $this->config['port'], $this->config['security']);
 
         $transport->setUsername($this->config['username'])
             ->setPassword($this->config['password']);
