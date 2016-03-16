@@ -18,8 +18,8 @@ class Mailer {
     protected static $initialized = false;
 
     public static $protocols = [
-        'mandrill' => 'TopFloor\\Utility\\MailProtocols\\MandrillMailProtocol',
-        'smtp' => 'TopFloor\\Utility\\MailProtocols\\SmtpMailProtocol',
+        'mandrill' => '\\TopFloor\\Utility\\MailProtocols\\MandrillMailHandler',
+        'smtp' => '\\TopFloor\\Utility\\MailProtocols\\SmtpMailHandler',
     ];
 
     public static function initialize() {
