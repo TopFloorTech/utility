@@ -6,7 +6,7 @@
  * Time: 11:55 AM
  */
 
-namespace TopFloor\Exceptions;
+namespace TopFloor\Utility\Exceptions;
 
 use Exception;
 
